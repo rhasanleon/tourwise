@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // MVP/trusted-group rules. Anyone possessing the unguessable trip link can read/write that trip.
+    // For a public production app, replace this with Firebase Authentication + membership checks.
+    match /trips/{tripKey} {
+      allow read, write: if tripKey.size() == 32;
+      match /{document=**} {
+        allow read, write: if tripKey.size() == 32;
+      }
+    }
+  }
+}

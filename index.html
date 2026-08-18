@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>TourWise — Shared Trip Expenses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">TW</span><span>TourWise</span></div>
+    <button id="shareBtn" class="btn ghost" hidden>Share trip</button>
+  </header>
+
+  <main class="shell">
+    <section id="landingView" class="landing">
+      <div class="hero-copy">
+        <span class="eyebrow">PRIVATE GROUP EXPENSE TRACKER</span>
+        <h1>Travel together.<br/>Settle without confusion.</h1>
+        <p>Create a trip, add friends by phone number, record expenses, track individual budgets, and automatically calculate who owes whom.</p>
+      </div>
+      <div class="card create-card">
+        <h2>Create a new trip</h2>
+        <form id="createTripForm">
+          <label>Trip name<input id="tripName" required placeholder="e.g. Miami Weekend" /></label>
+          <label>Currency
+            <select id="currency"><option value="USD">USD — $</option><option value="BDT">BDT — ৳</option><option value="EUR">EUR — €</option><option value="GBP">GBP — £</option></select>
+          </label>
+          <label>Your name<input id="creatorName" required placeholder="e.g. Leon" /></label>
+          <label>Your phone<input id="creatorPhone" required type="tel" placeholder="+18505551234" /></label>
+          <label>Your budget<input id="creatorBudget" required type="number" min="0" step="0.01" placeholder="500" /></label>
+          <button class="btn primary full" type="submit">Create trip</button>
+        </form>
+        <p class="fineprint">No Splitwise account required. Phone numbers are visible to members of this trip.</p>
+      </div>
+    </section>
+
+    <section id="tripView" hidden>
+      <div class="trip-head">
+        <div><span class="eyebrow">ACTIVE TRIP</span><h1 id="tripTitle"></h1><p id="tripMeta" class="muted"></p></div>
+        <button id="copyLinkBtn" class="btn secondary">Copy invite link</button>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat"><span>Total spent</span><strong id="totalSpent">$0.00</strong></article>
+        <article class="stat"><span>Members</span><strong id="memberCount">0</strong></article>
+        <article class="stat"><span>Expenses</span><strong id="expenseCount">0</strong></article>
+        <article class="stat accent"><span>Unsettled</span><strong id="unsettledTotal">$0.00</strong></article>
+      </div>
+
+      <div class="layout">
+        <div class="main-col">
+          <section class="card">
+            <div class="section-head"><div><h2>Add expense</h2><p>Split equally among selected people.</p></div></div>
+            <form id="expenseForm" class="expense-form">
+              <label>Description<input id="expenseDescription" required placeholder="Dinner, hotel, gas..." /></label>
+              <label>Amount<input id="expenseAmount" required type="number" min="0.01" step="0.01" placeholder="0.00" /></label>
+              <label>Paid by<select id="expensePayer" required></select></label>
+              <div class="label-block"><span>Split between</span><div id="splitMembers" class="checks"></div></div>
+              <button class="btn primary" type="submit">Add expense & notify</button>
+            </form>
+            <div id="smsStatus" class="notice" hidden></div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><div><h2>Expense history</h2><p>Every contribution appears here.</p></div></div>
+            <div id="expenseList" class="list empty">No expenses yet.</div>
+          </section>
+
+          <section class="card">
+            <div class="section-head"><div><h2>Who owes whom</h2><p>Minimum-transfer settlement suggestion.</p></div></div>
+            <div id="settlementList" class="list empty">Nothing to settle yet.</div>
+          </section>
+        </div>
+
+        <aside class="side-col">
+          <section class="card sticky-card">
+            <div class="section-head"><div><h2>Tour mates</h2><p>Budget and spending status.</p></div><button id="openMemberBtn" class="icon-btn" title="Add member">+</button></div>
+            <div id="memberList" class="member-list"></div>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="memberDialog">
+    <form id="memberForm" method="dialog" class="dialog-form">
+      <div class="section-head"><h2>Add tour mate</h2><button type="button" id="closeMemberBtn" class="icon-btn">×</button></div>
+      <label>Name<input id="memberName" required /></label>
+      <label>Phone<input id="memberPhone" required type="tel" placeholder="+1..." /></label>
+      <label>Personal budget<input id="memberBudget" required type="number" min="0" step="0.01" /></label>
+      <button class="btn primary full" type="submit">Add member</button>
+    </form>
+  </dialog>
+
+  <dialog id="budgetDialog">
+    <form id="budgetForm" method="dialog" class="dialog-form">
+      <div class="section-head"><h2>Update budget</h2><button type="button" id="closeBudgetBtn" class="icon-btn">×</button></div>
+      <input id="budgetMemberId" type="hidden" />
+      <p id="budgetMemberName" class="muted"></p>
+      <label>Budget<input id="budgetAmount" required type="number" min="0" step="0.01" /></label>
+      <button class="btn primary full" type="submit">Save budget</button>
+    </form>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
